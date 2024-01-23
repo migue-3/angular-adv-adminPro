@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { LoginForm } from '../interfaces/login-form.interface';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { Usuario } from 'src/models/usuario.model';
 
 // Lo declaramos aca para poder usar el objeto global que nos ofrece google en la instalacion que hicimos en el index
 declare const google: any;
@@ -16,10 +17,23 @@ const base_url = environment.base_url
 })
 export class UsuarioService {
 
+  public usuario!: Usuario;
+
   constructor( private http: HttpClient,
                private router: Router ) { }
+  
+  // Nos creamos un getter para tener acceso al token y no repetir el codigo
+  get token(): string {
+
+    return localStorage.getItem('token') || '';
+  }
+
+  get uid():string {
+    return this.usuario.uid || '';
+  }
 
   logout() {
+
     localStorage.removeItem('token');
 
     // Para borrar el usuario de google con el que hizo el login
@@ -39,6 +53,21 @@ export class UsuarioService {
                 localStorage.setItem('token', resp.token )
               })
             );
+  }
+
+  actualizarPerfil( data: { email: string, nombre:string, role:any }) {
+
+    //Para cumpliar con las validaciones tenemos que enviar el role tambien en la data a la peticion
+    data = {
+      ...data,
+      role: this.usuario.role
+    };
+
+    return this.http.put(`${base_url}/usuarios/${this.uid}`, data, {
+      headers: {
+        'x-token': this.token
+      }
+    });
   }
 
   loginUsuario( formData: LoginForm ) {
@@ -64,14 +93,27 @@ export class UsuarioService {
   }
 
   validarToken(): Observable<boolean> {
-    const token = localStorage.getItem('token') || '';
+
+    //Resolver error //[GSI_LOGGER]: Attemp to call revoke() before initialize()
+    google.accounts.id.initialize({
+      client_id:
+        '85631883213-g23grlean480rikei8v2vrjtq6vhratj.apps.googleusercontent.com',
+    });
     
     return this.http.get(`${ base_url }/login/renew-jwt`, {
       headers: {
-        'x-token': token
+        'x-token': this.token  //accedemos al token mediante el getters creado, para enviarlo en el header
       }
     }).pipe(
       tap( (resp: any) => {
+        // console.log(resp)
+
+        // Desestructuramos de la resp que viene del servicio el objeto UsuarioDB
+        const { email, google, nombre, role, img, uid } = resp.usuarioDB;
+        
+        // Creamos una nueva instancia del usuario almecanando la informacion que viene del servicio en la variable usuario
+        this.usuario = new Usuario( nombre, email, '', img, google, role, uid );
+        
         //Renovamos el token que viene en la resp
         localStorage.setItem('token', resp.token )
       }),

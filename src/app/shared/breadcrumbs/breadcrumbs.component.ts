@@ -34,6 +34,8 @@ export class BreadcrumbsComponent implements OnDestroy {
     )
     .subscribe( ({titulo}) => { 
       this.titulo = titulo;
+      
+      // Este es el titulo que aparece en la pestaña del navegador
       document.title = `AdminPro - ${this.titulo}`;  
     })
   }
