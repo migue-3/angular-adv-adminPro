@@ -3,6 +3,7 @@ import { Subscription, delay } from 'rxjs';
 import { BusquedasService } from 'src/app/services/busquedas.service';
 import { ModalImagenService } from 'src/app/services/modal-imagen.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { Hospital } from 'src/models/hospital.model';
 import { Usuario } from 'src/models/usuario.model';
 import Swal from 'sweetalert2';
 
@@ -76,7 +77,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.busquedasService
       .buscar('usuarios', termino)
       .subscribe((resultados) => {
-        this.usuarios = resultados;
+        this.usuarios = resultados as Usuario[];
       });
 
     return true;

@@ -10,35 +10,77 @@ import { RxjsComponent } from './rxjs/rxjs.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { PerfilComponent } from './perfil/perfil.component';
 import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
+import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
+import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.component';
+import { MedicoComponent } from './mantenimientos/medicos/medico.component';
 
 const routes: Routes = [
-    { 
+  {
     path: 'dashboard',
     component: PagesComponent,
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     children: [
-                        // Enviar parametros por la ruta(data)  //
-        { path: '', component: DashboardComponent, data: { titulo: 'Dashboard'} },
-        { path: 'grafica1', component: Grafica1Component, data: { titulo: 'Graficas'}  },
-        { path: 'progress', component: ProgressComponent, data: { titulo: 'ProgressBar'} },
-        { path: 'account-settings', component: AccountSettingsComponent, data: { titulo: 'Settings'} },
-        { path: 'promesas', component: PromesasComponent, data: { titulo: 'Promesas'} },
-        { path: 'rxjs', component: RxjsComponent, data: { titulo: 'Rxjs'} },
-        { path: 'perfil', component: PerfilComponent, data: { titulo: 'Perfil de usuario'} },
-        // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      // Enviar parametros por la ruta(data)  //
+      {
+        path: '',
+        component: DashboardComponent,
+        data: { titulo: 'Dashboard' },
+      },
+      {
+        path: 'grafica1',
+        component: Grafica1Component,
+        data: { titulo: 'Graficas' },
+      },
+      {
+        path: 'progress',
+        component: ProgressComponent,
+        data: { titulo: 'ProgressBar' },
+      },
+      {
+        path: 'account-settings',
+        component: AccountSettingsComponent,
+        data: { titulo: 'Settings' },
+      },
+      {
+        path: 'promesas',
+        component: PromesasComponent,
+        data: { titulo: 'Promesas' },
+      },
+      { path: 'rxjs', component: RxjsComponent, data: { titulo: 'Rxjs' } },
+      {
+        path: 'perfil',
+        component: PerfilComponent,
+        data: { titulo: 'Perfil de usuario' },
+      },
+      // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
-        //Mantenimientos
-        { path: 'usuarios', component: UsuariosComponent, data: { titulo: 'Usuarios de aplicacion'} },
-    ]
-   },
-]
+      //Mantenimientos
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        data: { titulo: 'Mantenimiento de Usuarios' },
+      },
+      {
+        path: 'medicos',
+        component: MedicosComponent,
+        data: { titulo: 'Mantenimiento de Médicos' },
+      },
+      {
+        path: 'medico/:id',
+        component: MedicoComponent,
+        data: { titulo: 'Mantenimiento de Médicos' },
+      },
+      {
+        path: 'hospitales',
+        component: HospitalesComponent,
+        data: { titulo: 'Mantenimiento de Hospitales' },
+      },
+    ],
+  },
+];
 
 @NgModule({
-    imports: [
-      RouterModule.forChild( routes)
-    ],
-    exports: [ RouterModule ]
-  })
-  export class PagesRoutingModule { }
-  
-
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class PagesRoutingModule {}
