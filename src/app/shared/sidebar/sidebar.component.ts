@@ -6,21 +6,15 @@ import { Usuario } from 'src/models/usuario.model';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styles: [
-  ]
+  styles: [],
 })
 export class SidebarComponent {
-
-  public menuItems: any[];
   public usuario!: Usuario;
 
-  constructor( private sidebarService: SidebarService,
-               private usuarioService: UsuarioService ) {
-    this.menuItems = sidebarService.menu;
+  constructor(
+    public sidebarService: SidebarService,
+    private usuarioService: UsuarioService
+  ) {
     this.usuario = usuarioService.usuario;
   }
-
-
-
 }
- 

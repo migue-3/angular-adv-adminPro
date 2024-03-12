@@ -38,8 +38,21 @@ export class UsuarioService {
     };
   }
 
+  //Metodo para guardar el token y el menu en el localStorage
+  guardarLocalStorage(token: string, menu: any) {
+    localStorage.setItem('token', token);
+
+    //Como en el localStorage solo podemos grabar strings y el menu es un
+    //objeto que tiene arrays tenemos que pasarlo por el JSON.stringify para
+    //grabarlo como si fuera un string
+    localStorage.setItem('menu', JSON.stringify(menu));
+  }
+
   logout() {
     localStorage.removeItem('token');
+
+    //TODO: Borrar menu
+    localStorage.removeItem('menu');
 
     // Para borrar el usuario de google con el que hizo el login
     google.accounts.id.revoke('miguelgervis1@gmail.com', () => {
@@ -52,7 +65,8 @@ export class UsuarioService {
     return this.http.post(`${base_url}/usuarios`, formData).pipe(
       tap((resp: any) => {
         // Grabamos el token en la localStorage
-        localStorage.setItem('token', resp.token);
+        // localStorage.setItem('token', resp.token);
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     );
   }
@@ -75,7 +89,8 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login`, formData).pipe(
       tap((resp: any) => {
         // Grabamos el token en la localStorage
-        localStorage.setItem('token', resp.token);
+        // localStorage.setItem('token', resp.token);
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     );
   }
@@ -84,8 +99,8 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login/google`, { token }).pipe(
       tap((resp: any) => {
         // Grabamos el token en la localStorage
-        // console.log('desde el service',resp)
-        localStorage.setItem('token', resp.token);
+        //localStorage.setItem('token', resp.token);
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     );
   }
@@ -114,7 +129,8 @@ export class UsuarioService {
           this.usuario = new Usuario(nombre, email, '', img, google, role, uid);
 
           //Renovamos el token que viene en la resp
-          localStorage.setItem('token', resp.token);
+          // localStorage.setItem('token', resp.token);
+          this.guardarLocalStorage(resp.token, resp.menu);
         }),
         // Con el operador map transformamos la resp en un valor booleano
         map((resp) => true),

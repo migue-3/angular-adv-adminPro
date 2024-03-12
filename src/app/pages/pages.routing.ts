@@ -13,6 +13,8 @@ import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component'
 import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
 import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.component';
 import { MedicoComponent } from './mantenimientos/medicos/medico.component';
+import { BusquedaComponent } from './busqueda/busqueda.component';
+import { adminGuard } from '../guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -20,7 +22,7 @@ const routes: Routes = [
     component: PagesComponent,
     canActivate: [AuthGuard],
     children: [
-      // Enviar parametros por la ruta(data)  //
+      // Enviar parametros por la ruta(data)
       {
         path: '',
         component: DashboardComponent,
@@ -42,6 +44,11 @@ const routes: Routes = [
         data: { titulo: 'Settings' },
       },
       {
+        path: 'buscar/:termino',
+        component: BusquedaComponent,
+        data: { titulo: 'Busqueda' },
+      },
+      {
         path: 'promesas',
         component: PromesasComponent,
         data: { titulo: 'Promesas' },
@@ -56,11 +63,6 @@ const routes: Routes = [
 
       //Mantenimientos
       {
-        path: 'usuarios',
-        component: UsuariosComponent,
-        data: { titulo: 'Mantenimiento de Usuarios' },
-      },
-      {
         path: 'medicos',
         component: MedicosComponent,
         data: { titulo: 'Mantenimiento de Médicos' },
@@ -74,6 +76,14 @@ const routes: Routes = [
         path: 'hospitales',
         component: HospitalesComponent,
         data: { titulo: 'Mantenimiento de Hospitales' },
+      },
+
+      //Rutas de ADMIN_ROLE - implementamos nuestro guard de ADMIN
+      {
+        path: 'usuarios',
+        canActivate: [adminGuard],
+        component: UsuariosComponent,
+        data: { titulo: 'Mantenimiento de Usuarios' },
       },
     ],
   },

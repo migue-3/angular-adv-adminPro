@@ -1,19 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../services/settings.service';
+import { SidebarService } from '../services/sidebar.service';
 
-declare function customInitFunctions():void;
+declare function customInitFunctions(): void;
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',
-  styles: [
-  ]
+  styles: [],
 })
 export class PagesComponent implements OnInit {
-
-  constructor( settingsService: SettingsService) {} 
+  constructor(
+    private settingsService: SettingsService,
+    private sidebarService: SidebarService
+  ) {}
 
   ngOnInit(): void {
-    customInitFunctions()
-  }
+    customInitFunctions();
 
+    //Aca llamamos al metodo para cargar el menu dentro de pages
+    this.sidebarService.cargarMenu();
+  }
 }
